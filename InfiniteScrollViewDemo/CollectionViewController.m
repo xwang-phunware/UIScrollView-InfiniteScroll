@@ -55,6 +55,9 @@ static NSString *const kCellIdentifier = @"PhotoCell";
     // Set custom indicator margin
     self.collectionView.infiniteScrollIndicatorMargin = 40;
     
+    // Set infinite scroll flow
+    self.collectionView.infiniteScrollFlow = UIScrollViewInfiniteScrollFlowUp;
+    
     // Add infinite scroll handler
     [self.collectionView addInfiniteScrollWithHandler:^(UICollectionView *collectionView) {
         [weakSelf fetchData:^{
@@ -156,13 +159,20 @@ static NSString *const kCellIdentifier = @"PhotoCell";
     
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
     NSArray *photos = [responseDict valueForKeyPath:@"items.media.m"];
-    NSInteger index = self.photos.count;
+    NSInteger indexPathRow = 0;
+    
+    if(self.collectionView.infiniteScrollFlow == UIScrollViewInfiniteScrollFlowDown) {
+        indexPathRow = self.photos.count;
+    }
     
     for(NSString *url in photos) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index++ inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:indexPathRow inSection:0];
+        NSURL *urlObject = [NSURL URLWithString:url];
         
-        [self.photos addObject:[NSURL URLWithString:url]];
+        [self.photos insertObject:urlObject atIndex:indexPathRow];
         [indexPaths addObject:indexPath];
+        
+        indexPathRow++;
     }
     
 //    self.modifiedAt = modifiedAt;

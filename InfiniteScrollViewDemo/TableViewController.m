@@ -77,6 +77,9 @@ static NSString *const kJSONNumPagesKey = @"nbPages";
     // Set custom indicator margin
     self.tableView.infiniteScrollIndicatorMargin = 40;
     
+    // Set infinite scroll flow
+    self.tableView.infiniteScrollFlow = UIScrollViewInfiniteScrollFlowUp;
+    
     // Add infinite scroll handler
     [self.tableView addInfiniteScrollWithHandler:^(UITableView *tableView) {
         [weakSelf fetchData:^{
@@ -159,7 +162,11 @@ static NSString *const kJSONNumPagesKey = @"nbPages";
     NSArray *results = responseDict[kJSONResultsKey];
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
     
-    NSInteger indexPathRow = self.stories.count;
+    NSInteger indexPathRow = 0;
+    
+    if(self.tableView.infiniteScrollFlow == UIScrollViewInfiniteScrollFlowDown) {
+        indexPathRow = self.stories.count;
+    }
     
     for(NSDictionary *i in results)
     {
@@ -168,7 +175,7 @@ static NSString *const kJSONNumPagesKey = @"nbPages";
             continue;
         }
         
-        [self.stories addObject:model];
+        [self.stories insertObject:model atIndex:indexPathRow];
         
         [indexPaths addObject:[NSIndexPath indexPathForRow:indexPathRow inSection:0]];
         
