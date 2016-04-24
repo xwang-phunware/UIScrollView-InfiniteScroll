@@ -62,6 +62,11 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 @property (nonatomic) UIActivityIndicatorViewStyle indicatorStyle;
 
 /**
+ *  Infinite scroll flow.
+ */
+@property (nonatomic) UIScrollViewInfiniteScrollFlow infiniteScrollFlow;
+
+/**
  *  Extra padding to push indicator view below view bounds.
  *  Used in case when content size is smaller than view bounds
  */
@@ -97,6 +102,9 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
         
         // Default row height (44) minus activity indicator height (22) / 2
         _indicatorMargin = 11;
+        
+        // Use .Down as default flow to keep the compatibility with older versions.
+        _infiniteScrollFlow = UIScrollViewInfiniteScrollFlowDown;
     }
     return self;
 }
@@ -191,6 +199,14 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 
 - (UIActivityIndicatorViewStyle)infiniteScrollIndicatorStyle {
     return self.pb_infiniteScrollState.indicatorStyle;
+}
+
+- (void)setInfiniteScrollFlow:(UIScrollViewInfiniteScrollFlow)infiniteScrollFlow {
+    self.pb_infiniteScrollState.infiniteScrollFlow = infiniteScrollFlow;
+}
+
+- (UIScrollViewInfiniteScrollFlow)infiniteScrollFlow {
+    return self.pb_infiniteScrollState.infiniteScrollFlow;
 }
 
 - (void)setInfiniteScrollIndicatorView:(UIView *)indicatorView {

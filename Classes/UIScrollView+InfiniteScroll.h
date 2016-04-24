@@ -21,6 +21,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ *  Infinite scroll flow.
+ */
+typedef NS_ENUM(NSInteger, UIScrollViewInfiniteScrollFlow) {
+    /**
+     *  Infinite scroll indicator appears at the top of scroll view.
+     *  Similar to pull to refresh, however new items are supposed to appear at the 
+     *  top of scroll view.
+     */
+    UIScrollViewInfiniteScrollFlowUp,
+    
+    /**
+     *  Infinite scroll indicator appears at the bottom of scroll view.
+     *  New items are supposed to appear at the bottom of scroll view.
+     */
+    UIScrollViewInfiniteScrollFlowDown
+};
+
 @interface UIScrollView (InfiniteScroll)
 
 /**
@@ -32,6 +50,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  Infinite scroll activity indicator style (default: UIActivityIndicatorViewStyleGray on iOS, UIActivityIndicatorViewStyleWhite on tvOS)
  */
 @property (nonatomic) UIActivityIndicatorViewStyle infiniteScrollIndicatorStyle;
+
+/**
+ *  Infinite scroll flow (Default: UIScrollViewInfiniteScrollFlowDown)
+ *  @see UIScrollViewInfiniteScrollFlow
+ */
+@property (nonatomic) UIScrollViewInfiniteScrollFlow infiniteScrollFlow;
 
 /**
  *  Infinite indicator view
