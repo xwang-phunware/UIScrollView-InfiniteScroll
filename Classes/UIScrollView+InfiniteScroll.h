@@ -56,6 +56,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setShouldShowInfiniteScrollHandler:(nullable BOOL(^)(UIScrollView *scrollView))handler;
 
 /**
+ *  Set a handler block to be called to check when infinite scroll should fire.
+ *
+ *  @param handler a handler block
+ */
+- (void)setInfiniteScrollActionOffsetHandler:(nullable CGPoint(^)(UIScrollView *scrollView, CGPoint proposedOffset))handler;
+
+/**
  *  Unregister infinite scroll
  */
 - (void)removeInfiniteScroll;
@@ -88,6 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addInfiniteScrollWithHandler:(void(^)(UITableView *tableView))handler;
 - (void)setShouldShowInfiniteScrollHandler:(BOOL(^)(UITableView *tableView))handler;
+- (void)setInfiniteScrollActionOffsetHandler:(nullable CGPoint(^)(UITableView *scrollView, CGPoint proposedOffset))handler;
 - (void)finishInfiniteScrollWithCompletion:(nullable void(^)(UITableView *tableView))handler;
 
 @end
@@ -96,6 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addInfiniteScrollWithHandler:(void(^)(UICollectionView *collectionView))handler;
 - (void)setShouldShowInfiniteScrollHandler:(BOOL(^)(UICollectionView *collectionView))handler;
+- (void)setInfiniteScrollActionOffsetHandler:(nullable CGPoint(^)(UICollectionView *scrollView, CGPoint proposedOffset))handler;
 - (void)finishInfiniteScrollWithCompletion:(nullable void(^)(UICollectionView *collectionView))handler;
 
 @end

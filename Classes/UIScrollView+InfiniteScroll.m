@@ -100,6 +100,11 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
  */
 @property (nonatomic, copy) BOOL(^shouldShowInfiniteScrollHandler)(id scrollView);
 
+/**
+ *  Block used to adjust proposed content offset for infinite scroll to kick in.
+ */
+@property (nonatomic, copy) CGPoint(^infiniteScrollActionOffsetHandler)(UIScrollView *scrollView, CGPoint proposedOffset);
+
 @end
 
 @implementation _PBInfiniteScrollState
@@ -240,7 +245,14 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
     state.shouldShowInfiniteScrollHandler = handler;
 }
 
+- (void)setInfiniteScrollActionOffsetHandler:(nullable CGPoint(^)(UIScrollView *scrollView, CGPoint proposedOffset))handler {
+    _PBInfiniteScrollState *state = self.pb_infiniteScrollState;
+    
+    state.infiniteScrollActionOffsetHandler = handler;
+}
+
 #pragma mark - Private dynamic properties
+#pragma mark -
 
 - (_PBInfiniteScrollState *)pb_infiniteScrollState {
     _PBInfiniteScrollState *state = objc_getAssociatedObject(self, kPBInfiniteScrollStateKey);
@@ -527,7 +539,9 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
     CGFloat contentHeight = [self pb_clampContentSizeToFitVisibleBounds:self.contentSize];
     
     // The lower bound when infinite scroll should kick in
-    CGFloat actionOffset = contentHeight - self.bounds.size.height + [self pb_originalBottomInset];
+    CGPoint actionOffset;
+    actionOffset.x = 0;
+    actionOffset.y = contentHeight - self.bounds.size.height + [self pb_originalBottomInset];
     
     // Disable infinite scroll when scroll view is empty
     // Default UITableView reports height = 1 on empty tables
@@ -548,11 +562,16 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
         return;
     }
     
-    if(contentOffset.y > actionOffset) {
+    // ask delegate to adjust the action offset
+    if(state.infiniteScrollActionOffsetHandler) {
+        actionOffset = state.infiniteScrollActionOffsetHandler(self, actionOffset);
+    }
+    
+    if(contentOffset.y > actionOffset.y) {
         TRACE(@"Action.");
         
         // Only show the infinite scroll if it is allowed
-        if([self pb_shouldShowInfiniteScroll]){
+        if([self pb_shouldShowInfiniteScroll]) {
             [self pb_startAnimatingInfiniteScroll];
             
             // This will delay handler execution until scroll deceleration
