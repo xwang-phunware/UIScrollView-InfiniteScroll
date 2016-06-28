@@ -53,7 +53,7 @@ static NSString *const kCellIdentifier = @"PhotoCell";
     self.collectionView.infiniteScrollIndicatorView = indicator;
     
     // Set custom indicator margin
-    self.collectionView.infiniteScrollIndicatorMargin = 40;
+    self.collectionView.infiniteScrollIndicatorMargin = 8;
     
     // Add infinite scroll handler
     [self.collectionView addInfiniteScrollWithHandler:^(UICollectionView *collectionView) {
@@ -157,6 +157,14 @@ static NSString *const kCellIdentifier = @"PhotoCell";
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
     NSArray *photos = [responseDict valueForKeyPath:@"items.media.m"];
     NSInteger index = self.photos.count;
+    
+    // allow only three photos in collection
+    if(index == 3) {
+        finish();
+        return;
+    }
+    
+    photos = [photos subarrayWithRange:NSMakeRange(0, 3)];
     
     for(NSString *url in photos) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index++ inSection:0];

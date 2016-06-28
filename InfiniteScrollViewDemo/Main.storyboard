@@ -117,7 +117,7 @@
         <!--Collection Demo-->
         <scene sceneID="1hN-xz-mo5">
             <objects>
-                <collectionViewController id="Ugq-Q8-x6w" customClass="CollectionViewController" sceneMemberID="viewController">
+                <collectionViewController hidesBottomBarWhenPushed="YES" id="Ugq-Q8-x6w" customClass="CollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="N9I-MA-jUn">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
