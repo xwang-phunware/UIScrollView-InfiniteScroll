@@ -101,6 +101,10 @@ static NSString *const kCellIdentifier = @"PhotoCell";
 #pragma mark - Private
 
 - (void)fetchData:(void(^)(void))completion {
+    if(self.photos.count >= 3) {
+        return completion();
+    }
+    
     NSURL *requestURL = [NSURL URLWithString:kAPIEndpointURL];
 
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:requestURL completionHandler:^(NSData *data, __unused NSURLResponse *response, NSError *error) {
@@ -157,12 +161,6 @@ static NSString *const kCellIdentifier = @"PhotoCell";
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
     NSArray *photos = [responseDict valueForKeyPath:@"items.media.m"];
     NSInteger index = self.photos.count;
-    
-    // allow only three photos in collection
-    if(index == 3) {
-        finish();
-        return;
-    }
     
     photos = [photos subarrayWithRange:NSMakeRange(0, 3)];
     
